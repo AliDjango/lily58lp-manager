@@ -1,0 +1,9 @@
+# Configuration precedence: explicit environment > project .env > this file.
+# Leave the URL empty to disable room-temperature telemetry.
+LILY58_PROMETHEUS_URL=
+LILY58_ROOM_TEMP_1_QUERY=temperature
+LILY58_ROOM_TEMP_2_QUERY=thermometer_temperature_celsius
+LILY58_REQUEST_TIMEOUT_SECONDS=2
+LILY58_TELEMETRY_INTERVAL_SECONDS=1
+LILY58_PERSIAN_LAYOUT_INDEX=1
+# LILY58_LOG_LEVEL=INFO

@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - run: uv sync --all-groups
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run pytest
+      - run: bash -n install-service.sh
+      - name: Validate rendered unit
+        run: |
+          sed -e "s|@PROJECT_DIR@|$PWD|g" -e "s|@VENV_DIR@|$PWD/.venv|g" \
+            lily58lp-manager.service > /tmp/lily58lp-manager.service
+          systemd-analyze verify /tmp/lily58lp-manager.service
