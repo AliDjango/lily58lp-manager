@@ -4,7 +4,7 @@ After=graphical-session.target
 
 [Service]
 Type=simple
-ExecStart=/home/alish/Files/Projects/alishlily58driver/.venv/bin/python3 /home/alish/Files/Projects/alishlily58driver/lily58_manager.py
+ExecStart=/home/alish/Files/Projects/lily58lp-manager/.venv/bin/python3 /home/alish/Files/Projects/lily58lp-manager/lily58_manager.py
 Restart=on-failure
 RestartSec=5
 
