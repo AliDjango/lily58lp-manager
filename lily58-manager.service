@@ -1,0 +1,18 @@
+[Unit]
+Description=Lily58 Keyboard HID Manager
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/home/alish/Files/Projects/alishlily58driver/.venv/bin/python3 /home/alish/Files/Projects/alishlily58driver/lily58_manager.py
+Restart=on-failure
+RestartSec=5
+
+
+# Environment variables for GUI applications
+Environment="DISPLAY=:0"
+Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%U/bus"
+Environment="XDG_RUNTIME_DIR=/run/user/%U"
+
+[Install]
+WantedBy=default.target
