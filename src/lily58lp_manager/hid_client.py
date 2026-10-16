@@ -16,7 +16,8 @@ PRODUCT_ID = 0x5800
 USAGE_PAGE = 0xFF60
 USAGE = 0x61
 REPORT_LENGTH = 32
-REPORT_ID = 0x85
+HID_REPORT_ID = 0x00
+TELEMETRY_COMMAND = 0x88
 
 
 class HidClient:
@@ -48,9 +49,17 @@ class HidClient:
         if interface is None:
             return False
 
-        report = bytes([REPORT_ID]) + data.ljust(REPORT_LENGTH - 1, b"\0")
+        # HIDAPI requires a leading report ID even for unnumbered HID reports.
+        # 0x88 is the firmware's one-way telemetry command: no reply is queued
+        # on the shared input endpoint, so VIA can receive its own responses.
+        report = bytes([HID_REPORT_ID, TELEMETRY_COMMAND]) + data.ljust(REPORT_LENGTH - 1, b"\0")
         try:
-            interface.write(report)
+            written = interface.write(report)
+            if written != len(report):
+                WARNINGS.warning(
+                    "short-write", "Incomplete Lily58 HID write: %s/%s bytes", written, len(report)
+                )
+                return False
             return True
         except Exception as error:  # hid exposes platform-specific exception types
             WARNINGS.warning("write", "Could not write Lily58 HID report: %s", error)
